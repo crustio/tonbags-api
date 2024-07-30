@@ -4,7 +4,7 @@ declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
-  await app.listen(3010);
+  await app.listen(3005);
   app.enableCors();
   if (module.hot) {
     module.hot.accept();
