@@ -16,4 +16,4 @@ RUN cd /app && rm -rf /app/dist &&  npm run build
 
 EXPOSE 3005
 
-CMD ["node", "src/dist/main.js"]
+CMD ["node", "dist/src/main.js"]
