@@ -34,5 +34,5 @@ jobs:
           push: true
 
           tags: |
-            crustio/tonbags-tgbot:latest
-            crustio/tonbags-tgbot:${{env.date}}
+            crustio/tonbags-api:latest
+            crustio/tonbags-api:${{env.date}}
