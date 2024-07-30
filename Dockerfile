@@ -6,6 +6,7 @@ WORKDIR /app
 
 
 COPY . .
+COPY prisma ./
 
 COPY package.json /app/package.json
 RUN rm -rf /app/package-lock.json
