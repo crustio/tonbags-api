@@ -20,4 +20,9 @@ export class UserController {
     }
     return this.userService.recordUserInfo(body);
   }
+
+  @Get('/all')
+  async getAll(@Query() query: { address: string }) {
+    return this.userService.user(query?.address);
+  }
 }

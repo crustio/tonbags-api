@@ -16,18 +16,26 @@ export class UserService {
     }
   }
 
-  async recordUserInfo(user: user) {
-    console.log('useruser', user);
+  async all() {
+    try {
+      const data = await this.prisma.user.findMany();
+      return { success: data.length > 0, data };
+    } catch (error) {
+      Logger.error('queryUser', error);
+      return { success: false, data: 'server error!!' };
+    }
+  }
 
+  async recordUserInfo({ address, from, fileName, file, fileSize }: user) {
     try {
       const data = await this.prisma.user.create({
         data: {
-          address: user.address,
-          from: user.from,
-          fileName: user.fileName,
-          file: user.file,
+          address,
+          from,
+          fileName,
+          file,
           uploadDate: new Date().getTime().toString(),
-          fileSize: user.fileSize,
+          fileSize,
         },
         select: {
           id: true,
