@@ -1,32 +1,55 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { user } from '@prisma/client';
 import { PrismaService } from 'prisma/prisma.service';
+import { calculateTotalFileSize } from 'src/utils/index';
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async user(address: string) {
+  async user(address: string, page: number, pageSize: number) {
     try {
-      const data = await this.prisma.user.findMany({ where: { address } });
-      return { success: data.length > 0, data };
+      const data = await this.prisma.user.findMany({
+        skip: (page - 1) * pageSize,
+        take: Number(pageSize),
+        where: { address },
+      });
+      const totalRecords = await this.prisma.user.count({
+        where: {
+          address,
+        },
+      });
+      const filesSize =
+        (await this.prisma.user.findMany({
+          where: { address },
+        })) || [];
+      const acont = calculateTotalFileSize(filesSize, 'fileSize');
+
+      return {
+        success: data.length > 0,
+        data,
+        countFileSize: acont,
+        pagination: {
+          page,
+          pageSize,
+          totalRecords,
+          totalPages: Math.ceil(totalRecords / pageSize),
+        },
+      };
     } catch (error) {
       Logger.error('queryUser', error);
-      return { success: false, data: 'server error!!' };
+      return { success: false, msg: 'server error!!', data: null };
     }
   }
 
-  async all() {
-    try {
-      const data = await this.prisma.user.findMany();
-      return { success: data.length > 0, data };
-    } catch (error) {
-      Logger.error('queryUser', error);
-      return { success: false, data: 'server error!!' };
-    }
-  }
-
-  async recordUserInfo({ address, from, fileName, file, fileSize }: user) {
+  async recordUserInfo({
+    bagId,
+    address,
+    from,
+    fileName,
+    file,
+    fileSize,
+  }: user) {
     try {
       const data = await this.prisma.user.create({
         data: {
@@ -36,6 +59,7 @@ export class UserService {
           file,
           uploadDate: new Date().getTime().toString(),
           fileSize,
+          bagId,
         },
         select: {
           id: true,
@@ -44,7 +68,7 @@ export class UserService {
       return { success: !!data.id };
     } catch (error) {
       Logger.error('recordUserInfo', error);
-      return { success: false, data: 'server error!!' };
+      return { success: false, msg: 'server error!!', data: null };
     }
   }
 }

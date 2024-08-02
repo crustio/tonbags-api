@@ -15,4 +15,5 @@ model user {
   uploadDate String @db.VarChar(100)
   fileSize   String @db.VarChar(100)
   address    String @db.VarChar(100)
+  bagId      String @db.VarChar(100)
 }
