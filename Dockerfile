@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 COPY prisma ./
 
-RUN npx prisma generate
+RUN npm exec prisma generate
 
 COPY package.json /app/package.json
 RUN rm -rf /app/package-lock.json
