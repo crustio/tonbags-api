@@ -13,6 +13,9 @@ export class UserService {
         skip: (page - 1) * pageSize,
         take: Number(pageSize),
         where: { address },
+        orderBy: {
+          uploadDate: 'desc',
+        },
       });
       const totalRecords = await this.prisma.user.count({
         where: {
