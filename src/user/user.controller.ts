@@ -12,7 +12,10 @@ export class UserController {
   ) {
     const { address = '', page = 1, pageSize = 10 } = query;
     if (!query?.address) return { success: false, data: null };
-    return this.userService.user(address, page, pageSize);
+    const data = this.userService.user(address, page, pageSize);
+    console.log('datadda', data, query);
+
+    return data;
   }
 
   @Post('/record')
