@@ -12,7 +12,7 @@ export class UserController {
   ) {
     const { address = '', page = 1, pageSize = 10 } = query;
     if (!query?.address) return { success: false, data: null };
-    const data = this.userService.user(address, page, pageSize);
+    const data = await this.userService.user(address, page, pageSize);
     console.log('datadda', data, query);
 
     return data;
